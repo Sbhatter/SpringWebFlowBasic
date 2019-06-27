@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/webflow
+http://www.springframework.org/schema/webflow/spring-webflow-2.4.xsd">
+ 
+<var name="loginCredentials" class="com.springwebflow.model.LoginCredentials"/>
+
+<!-- Display the login page -->
+<view-state id="display_login" view="/login/display_login.jsp" model="loginCredentials">
+	<!--  <transition on="loginCredentialsEntered" to="displayLoginSuccessView"/>  -->
+	 <transition on="loginCredentialsEntered" to="performLoginAction"/> 
+</view-state>
+ 
+<action-state id="performLoginAction">
+<evaluate expression="loginService.performLogin(loginCredentials)"/>
+ <transition on="success" to="displayLoginSuccessView"/>
+<transition on-exception="com.springwebflow.exception.IncorrectLoginCredentialsException"
+to="displayLoginErrorView"/>
+</action-state>
+ 
+<view-state id="displayLoginSuccessView" view="/views/display_login_success.jsp"/>
+ 
+<view-state id="displayLoginErrorView" view="/views/display_login_error.jsp"/>
+</flow>
